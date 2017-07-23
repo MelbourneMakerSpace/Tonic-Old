@@ -34,7 +34,7 @@ routes:                verb            modelFunc()          incomingJson        
     */
 
 ########## Members Details  ##############################################################################################################
-    /details        --> post            MemeberDetails()  requestPayLoadhasCookie           code_Below
+    /member        --> post            MemeberDetails()  requestPayLoadhasCookie           code_Below
           {
             permissions: '',
             memberDetails: {name:'', phone: int, email:'', payPal: ''},
@@ -42,25 +42,25 @@ routes:                verb            modelFunc()          incomingJson        
             picture: {img: imgFILE},
             stats: { memberSince: date, balance: float }
           }
-    /details/plans/<id> --> get
+    /member/plans/<id> --> get
           {
             permissions: '',
             memberEmergency: {name: '', email: '', phone: ''},
             plans: [{name: '', start: date, end: date}]
           }
-    /details/keys/<id> ---> get
+    /member/keys/<id> ---> get
           {
             permissions: '',
             keys: [{serial: int, active: 0||1, }],
           }
-    /details/payments/<id> ---> get
+    /member/payments/<id> ---> get
           {
             permissions: '',
             payments: [{date: date, description: '', amount: int, method: '', confirmation: 'yes/no', notes: ''}],
           }
 
 
-    /details/picture/<id>  ---> put
+    /member/picture/<id>  ---> put
         /*This will update the pic and return the new pic.*/
 
         **** Client Send us a JSON obj  ***
