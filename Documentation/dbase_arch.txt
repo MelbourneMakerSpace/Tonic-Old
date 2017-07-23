@@ -4,30 +4,50 @@ This is the architecture document that describes how the database tables are int
 
 Events:
 1.) Login
-2.) Forgot password
     SELECT * FROM user JOIN contact ON contact.cid=user.cid WHERE contact.email="weverest@navray.com"
+    # returns PID, HASH, and SALT
+2.) Forgot password
+    # not developed
 3a.) List active users
     SELECT contact.cid, contact.firstName, contact.lastName, plan.name, contact.email, contact.phone, plan.active
-	FROM contact
-	LEFT JOIN membership
-	ON contact.cid=membership.cid
-	LEFT JOIN plan
-	ON membership.pid=plan.pid
-	WHERE plan.active=1
+    FROM contact
+    LEFT JOIN membership
+    ON contact.cid=membership.cid
+    LEFT JOIN plan
+    ON membership.pid=plan.pid
+    WHERE plan.active=1
 3b.) List both active and inactive users
     SELECT contact.cid, contact.firstName, contact.lastName, plan.name, contact.email, contact.phone, plan.active
-	FROM contact
-	LEFT JOIN membership
-	ON contact.cid=membership.cid
-	LEFT JOIN plan
-	ON membership.pid=plan.pid
-3.) Add User
-4.) Add/Modify Member Plan
-5.) Add payment method
-6.) Add payment history
-7.) Modify payment history
-8.) Modify member type
-9.) Add/delete access key
+    FROM contact
+    LEFT JOIN membership
+    ON contact.cid=membership.cid
+    LEFT JOIN plan
+    ON membership.pid=plan.pid
+4a.) Check if email already exists
+    SELECT cid FROM contact WHERE email=$email
+    # returns null of okay to add member
+4b.) Add new user (Input at least a first and last name, creates new CID, advances to full member detail page)
+    INSERT INTO contact(firstName, lastName, email)
+    VALUES ($firstName, $lastName, $email)
+5a.) Check if email already exists
+    SELECT cid FROM contact WHERE email=$email
+    # returns null of okay to update member
+5b.) Update existing user
+    UPDATE contact
+    SET firstName=$firstName,
+      middleName=$middleName,
+      lastName=$lastName,
+      email=$email,
+      phone=$phone,
+      emergencyName=$emergencyName,
+      emergencyPhone=$emergencyPhone 
+    WHERE cid=121
+6.) Add/modify member Plan
+7.) Add payment method
+8.) Add payment history
+9.) Modify payment history
+10.) Modify member type
+11.) Add/delete access key
 
 Database 'tonic'
 
