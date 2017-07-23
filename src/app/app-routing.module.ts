@@ -7,7 +7,7 @@ import { MemberListComponent } from "./components/member-list/member-list.compon
 import { PlansGridComponent } from "./components/plans-grid/plans-grid.component";
 import { MemberPaymentsComponent } from "./components/member-payments/member-payments.component";
 import { KeysGridComponent } from "./components/keys-grid/keys-grid.component";
-
+import { RestTestComponent } from "./components/rest-test/rest-test.component";
 
 const routes: Routes = [
   {
@@ -37,6 +37,10 @@ const routes: Routes = [
   {
     path: "keys",
     component: KeysGridComponent
+  },
+  {
+    path: "resttest",
+    component: RestTestComponent
   }
 ];
 
