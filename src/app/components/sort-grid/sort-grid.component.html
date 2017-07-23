@@ -1,0 +1,48 @@
+<div class="ui fluid">
+    <table class="ui celled table">
+        <thead>
+            <tr>
+                <th (click)="sortByColumn('Name')">
+                    Name
+                </th>
+                <th>
+                    Plan
+                </th>
+                <th>
+                    E-Mail
+                </th>
+                <th>
+                    Phone
+                </th>
+                <th>
+                    Balance
+                </th>
+                <th>
+                    Status
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let member of data | orderBy: sortColumn">
+                <td>
+                    {{member.Name}}
+                </td>
+                <td>
+                    {{member.Plan}}
+                </td>
+                <td>
+                    {{member.Email}}
+                </td>
+                <td>
+                    {{member.Phone}}
+                </td>
+                <td>
+                    {{member.Balance}}
+                </td>
+                <td>
+                    {{member.Status}}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

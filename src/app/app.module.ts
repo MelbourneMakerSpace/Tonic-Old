@@ -14,7 +14,9 @@ import { MemberKeysComponent } from "./components/member-keys/member-keys.compon
 import { MemberPaymentsComponent } from "./components/member-payments/member-payments.component";
 import { MemberPictureComponent } from "./components/member-picture/member-picture.component";
 import { MemberEditComponent } from "./components/member-edit/member-edit.component";
-import { MemberStatsComponent } from './components/member-stats/member-stats.component';
+import { MemberStatsComponent } from "./components/member-stats/member-stats.component";
+import { SortGridComponent } from "./components/sort-grid/sort-grid.component";
+import { OrderPipe } from "./pipes/sort.pipe";
 
 @NgModule({
   declarations: [
@@ -29,7 +31,9 @@ import { MemberStatsComponent } from './components/member-stats/member-stats.com
     MemberPaymentsComponent,
     MemberPictureComponent,
     MemberEditComponent,
-    MemberStatsComponent
+    MemberStatsComponent,
+    SortGridComponent,
+    OrderPipe
   ],
   imports: [BrowserModule, FormsModule, HttpModule, AppRoutingModule],
   providers: [],
