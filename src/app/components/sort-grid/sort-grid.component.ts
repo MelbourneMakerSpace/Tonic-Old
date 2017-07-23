@@ -9,7 +9,7 @@ import { Member } from "../../models/member-data.class";
   styleUrls: ["./sort-grid.component.css"]
 })
 export class SortGridComponent implements OnInit {
-  data:Member[] = [
+  data: Member[] = [
     { Name: "Tony Bellomo", Email: "tony.bellomo@gmail.com", Plan: "full", Balance: 0.0, Status: "Active", Phone: "555-1234" },
     { Name: "Tony Bellomo2", Email: "tony.bellomo@gmail.com", Plan: "half", Balance: 5.0, Status: "Active", Phone: "555-1234" },
     { Name: "Tony Bellomo3", Email: "tony.bellomo@gmail.com", Plan: "full", Balance: 20.0, Status: "Disabled", Phone: "555-1234" }

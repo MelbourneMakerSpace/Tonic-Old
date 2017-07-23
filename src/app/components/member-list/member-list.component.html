@@ -1,4 +1,50 @@
 <div class="sixteen wide column">
-<!-- Content Goes here -->
-	<h1>Member List Works And Has a Layout</h1>
+    <div class="ui fluid">
+        <table class="ui celled table">
+            <thead>
+                <tr>
+                    <th (click)="sortByColumn('Name')">
+                        Name
+                    </th>
+                    <th (click)="sortByColumn('Plan')">
+                        Plan
+                    </th>
+                    <th (click)="sortByColumn('Email')">
+                        E-Mail
+                    </th>
+                    <th (click)="sortByColumn('Phone')">
+                        Phone
+                    </th>
+                    <th (click)="sortByColumn('Balance')">
+                        Balance
+                    </th>
+                    <th (click)="sortByColumn('Status')">
+                        Status
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let member of data | orderBy: sortColumn">
+                    <td>
+                        <a routerLink="/member-edit/{{member.ID}}">{{member.Name}}</a>
+                    </td>
+                    <td>
+                        {{member.Plan}}
+                    </td>
+                    <td>
+                        <a href="mailto:{{member.Email}}" target="_top">{{member.Email}}</a>
+                    </td>
+                    <td>
+                        {{member.Phone}}
+                    </td>
+                    <td>
+                        {{member.Balance}}
+                    </td>
+                    <td>
+                        {{member.Status}}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>

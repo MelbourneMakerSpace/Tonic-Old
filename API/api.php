@@ -99,7 +99,9 @@ private function member($_method,$param,$row){
             $json = json_encode($dt);
             echo $json;
     }
-
+// API/member/119
+// "_method":"PUT"
+// data: {}
         if($_method=="DELETE"){
             //$myDatabase= $this->db;// variable to access your database
             $sql = "delete from contact where cid = $param";
@@ -124,7 +126,7 @@ private function member($_method,$param,$row){
             '$emergencyPhone', '$emergencyEmail')";
             echo $sql;
         }
-        if($_method=="PATCH"){
+        if($_method=="POST"){
             //$myDatabase= $this->db;// variable to access your database
             
             $jsonData = json_decode($_POST['details'],true);
