@@ -6,12 +6,17 @@ error_reporting(E_ALL);
 // header("Cache-Control: post-check=0, pre-check=0", false); 
 // header("Pragma: no-cache");
 require_once("Rest.inc.php");
-header('Access-Control-Allow-Origin: *'); 
+if (array_key_exists('HTTP_ORIGIN', $_SERVER)) {
+    $http_origin = $_SERVER['HTTP_ORIGIN'];
+        header("Access-Control-Allow-Origin: $http_origin");
+}
+
     header("Access-Control-Allow-Credentials: true");
     header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
     header('Access-Control-Max-Age: 1000');
     header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token , Authorization');
-
+$message = file_get_contents('php://input');
+error_log($message,3,'log.log');
 
 class API extends REST {
      
@@ -61,19 +66,19 @@ public function processApi(){
 
         else if(count($funcArray) == 3)
         {
-            $row = $funcArray[1];
+            $col = $funcArray[1];
             $param = $funcArray[2];
         }
         
 
-        if((int)method_exists($this,$func) > 0 && (!isset($param) || strlen($param)==0) && !isset($row))
+        if((int)method_exists($this,$func) > 0 && (!isset($param) || strlen($param)==0) && !isset($col))
             $this->$func($_method);
 
-        else if((int)method_exists($this,$func) > 0 && $param && !isset($row))
+        else if((int)method_exists($this,$func) > 0 && $param && !isset($col))
             $this->$func($_method,$param);
 
-        else if((int)method_exists($this,$func) > 0 && $param && $row)
-            $this->$func($_method,$param,$row);
+        else if((int)method_exists($this,$func) > 0 && $param && $col)
+            $this->$func($_method,$param,$col);
 
         else
             $this->response('Error code 404, Page not found',404);   // If the method not exist with in this class, response would be "Page not found".
@@ -86,21 +91,42 @@ private function hello(){
 }
 
 //Member is a Contact with a user/login, key, etc.
-private function member($_method,$param = '',$row = ''){
+private function member($_method,$param = '',$col = ''){
     $dbconn = new mysqli(self::DB_SERVER,self::DB_USER,self::DB_PASSWORD,self::DB);
 
     if($this->get_request_method() == "GET"){
-            //$myDatabase= $this->db;// variable to access your database
-        if(!$param && !$row){
-            $sql = "SELECT * from contact";
-        }
 
-        else if($param && !$row){
+
+
+            //$myDatabase= $this->db;// variable to access your database
+        if(!$param && !$col){
+            $sql = "SELECT * from contact";
+            
+        if(isset($_POST['getInactive'])){
+                $sql = "SELECT contact.cid, contact.firstName, contact.lastName, plan.name, contact.email, contact.phone, plan.active
+                FROM contact
+                LEFT JOIN membership
+                ON contact.cid=membership.cid
+                LEFT JOIN plan
+                ON membership.pid=plan.pid
+                WHERE plan.active=1";
+                }
+        else{
+                $sql = "SELECT contact.cid, contact.firstName, contact.lastName, plan.name, contact.email, contact.phone, plan.active
+                        FROM contact
+                        LEFT JOIN membership
+                        ON contact.cid=membership.cid
+                        LEFT JOIN plan
+                        ON membership.pid=plan.pid";
+            }
+    }
+
+        else if($param && !$col){
             $sql = "SELECT * from contact where cid = $param";
         }
 
-        else if($param && $row)
-            $sql = "SELECT * from contact where $row = '$param'";
+        else if($param && $col)
+            $sql = "SELECT * from contact where $col = '$param'";
 
             $result = $dbconn->query($sql);
             $dt = array();
@@ -191,10 +217,10 @@ private function member($_method,$param = '',$row = ''){
             if(isset($jsonData['password'])){
             $password = $jsonData['password'];
             $hash = password_hash($password, PASSWORD_DEFAULT);
-            echo $hash;
+       
             $sql = "update user set hash = '$hash' and username = '$email' where cid = $cid";
             $result = $dbconn->query($sql);
-            echo $sql;
+   
             }
     
 
@@ -213,6 +239,12 @@ private function member($_method,$param = '',$row = ''){
         //TODO: Password Reset.
 
     
+}
+
+private function forgot($email){
+        $dbconn = new mysqli(self::DB_SERVER,self::DB_USER,self::DB_PASSWORD,self::DB);
+
+
 }
 
 private function login(){

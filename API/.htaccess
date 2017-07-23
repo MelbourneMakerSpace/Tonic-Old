@@ -11,7 +11,6 @@
  
     RewriteCond %{REQUEST_FILENAME} -s
     RewriteRule ^(.*)$ api.php [QSA,NC,L]
-    Header add Access-Control-Allow-Origin "*" 
 
 </IfModule>
 

@@ -1,0 +1,11 @@
+test_method=PUT&data=%7B%22firstName%22%3A%22asdasd%22%2C+%22lastName%22%3A%22guy%22%2C+%22phone%22%3A%22123123asdasd123%22%2C+%22email%22%3A%22test%40testasdasd.com%22%2C+%22paypalEmail%22%3A%22elon%40paypal.com%22%2C+%22emergencyName%22%3A%22bob%22%2C+%22emergencyPhone%22%3A%22123%22%2C+%22emergencyEmail%22%3A%22bill%40microsoft.com%22%2C+%22rid%22%3A%229%22%2C+%22password%22%3A%22123%22%7D------WebKitFormBoundaryP6zxO5Y6RNU8Hmpe
+Content-Disposition: form-data; name="_method"
+
+DELETE
+------WebKitFormBoundaryP6zxO5Y6RNU8Hmpe--
+_method=DELETE_method=DELETE_method=DELETE------WebKitFormBoundaryAbHI6B0ZEcYO2Hl9
+Content-Disposition: form-data; name="_method"
+
+_method=DELETE
+------WebKitFormBoundaryAbHI6B0ZEcYO2Hl9--
+credentials=%7B%22username%22%3A%22kirk%22%2C%22password%22%3A%22git+gud%22%7D
