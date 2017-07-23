@@ -21,6 +21,8 @@ routes:                verb            modelFunc()          incomingJson        
     /forgot/<email> --> get             forgot(email)         none                     { bool: true/false, data: ["Error" || "Email sent"] }
 
 
+######### Members DashBoard ################################################################################################################
+
     /manager        --> get             manager()       requestpayLoadhasCookie       { permissions: '', memeberList: [{ id: '', name: '', plan: '', email: '', phone: '', balance: integer, status: '' }, {}] }
 
     /manager        --> post            manager()       requestpayLoadhasCookie             same as above
@@ -31,7 +33,7 @@ routes:                verb            modelFunc()          incomingJson        
           Data being returned to client is the JSON data listed below.
     */
 
-
+########## Members Details  ##############################################################################################################
     /details        --> post            MemeberDetails()  requestPayLoadhasCookie           code_Below
           {
             permissions: '',
@@ -56,3 +58,20 @@ routes:                verb            modelFunc()          incomingJson        
             permissions: '',
             payments: [{date: date, description: '', amount: int, method: '', confirmation: 'yes/no', notes: ''}],
           }
+
+
+    /details/picture/<id>  ---> put
+        /*This will update the pic and return the new pic.*/
+
+        **** Client Send us a JSON obj  ***
+            {
+              newPic: ???
+            }
+
+        **** Server sends back *****
+
+            {
+              bool: true/false
+              data: < errors[] or pic[0] >
+            }
+            
