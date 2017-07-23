@@ -97,7 +97,9 @@ private function contact($_method,$param,$row){
             $json = json_encode($dt);
             echo $json;
     }
-
+// API/member/119
+// "_method":"PUT"
+// data: {}
         if($_method=="DELETE"){
             //$myDatabase= $this->db;// variable to access your database
             $sql = "delete from contact where cid = $param";
@@ -109,9 +111,9 @@ private function contact($_method,$param,$row){
             $sql = "insert into contact(stuff) values(stuff) ";
             echo $sql;
         }
-        if($_method=="PATCH"){
+        if($_method=="POST"){
             //$myDatabase= $this->db;// variable to access your database
-            $sql = "update stuff";
+            $sql = "creation";
             echo $sql;
         }
 
