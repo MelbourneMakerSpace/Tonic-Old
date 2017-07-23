@@ -1,0 +1,39 @@
+Sudo Code      //   json data ---> { propName: value, propName, propName: value }
+
+
+/*
+    CURRENT DRAFT: VERSION 1
+*/
+
+
+
+
+routes:                verb            modelFunc()          incomingJson                          serveContent: (or json)
+
+############### Login Page Routes #########################################################################################################
+
+
+    /         --->     get             ???start()???            ????                                index.html
+
+
+    /login    --->     post             login()        { email: '', password: ''}     { session_ID: '' || 'false', data:'' })
+
+    /forgot/<email> --> get             forgot(email)         none                     { bool: true/false, data: ["Error" || "Email sent"] }
+
+
+    /manager        --> get             manager()       requestpayLoadhasCookie       { permissions: '', memeberList: [{ id: '', name: '', plan: '', email: '', phone: '', balance: integer, status: '' }, {}] }
+
+    /manager        --> post            manager()       requestpayLoadhasCookie             same as above
+
+
+    /details        --> post            MemeberDetails()  requestPayLoadhasCookie           below
+          {
+            permissions: '',
+            memberDetails: {name:'', phone: int, email:'', payPal: ''},
+            memberEmergency: {name: '', email: '', phone: ''},
+            plans: [{name: '', start: date, end: date}],
+            keys: [{serial: int, active: 0||1, }],
+            payments: [{date: date, description: '', amount: int, method: '', confirmation: 'yes/no', notes: ''}],
+            picture: {img: imgFILE}, stats: { memberSince: date, balance: float }
+          }
+    
