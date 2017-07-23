@@ -17,6 +17,7 @@ import { MemberEditComponent } from "./components/member-edit/member-edit.compon
 import { MemberStatsComponent } from "./components/member-stats/member-stats.component";
 import { SortGridComponent } from "./components/sort-grid/sort-grid.component";
 import { OrderPipe } from "./pipes/sort.pipe";
+import { KeysGridComponent } from './components/keys-grid/keys-grid.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { OrderPipe } from "./pipes/sort.pipe";
     MemberEditComponent,
     MemberStatsComponent,
     SortGridComponent,
-    OrderPipe
+    OrderPipe,
+    KeysGridComponent
   ],
   imports: [BrowserModule, FormsModule, HttpModule, AppRoutingModule],
   providers: [],
