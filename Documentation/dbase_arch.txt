@@ -1,0 +1,173 @@
+####################################
+This is the architecture document that describes how the database tables are interconnected
+####################################
+
+Events:
+1.) Login
+2.) Forgot password
+3.) Add User
+4.) Add/Modify Member Plan
+5.) Add payment method
+6.) Add payment history
+7.) Modify payment history
+8.) Modify member type
+9.) Add/delete access key
+
+Database 'tonic'
+
+### First table updated for new members ###
+### Creates CID ###
+contact
+Column	        Type	Null	Default
+cid	            mediumint(8)	No	
+firstName	    varchar(255)	No	
+middleName	    varchar(255)	No	
+lastName	    varchar(255)	No	
+email	        varchar(255)	No	
+phone	        varchar(32)	No	
+emergencyName	varchar(255)	No	
+emergencyPhone	varchar(16)	No	
+
+####################################
+### Creates PID ###
+plan
+Column	        Type	Null	Default
+pid	            mediumint(8)	No	
+name	        varchar(255)	No	
+price	        varchar(6)	No	
+active	        tinyint(1)	No	
+voting	        tinyint(1)	No	
+
+###################################
+### Creates KID ###
+key
+Column	        Type	Null	Default
+kid	            mediumint(8)	No	
+cid	            mediumint(8)	No	
+start	        date	Yes	NULL
+end	            date	Yes	NULL
+serial	        varchar(255)	No	
+slot	        mediumint(8)	No	
+
+####################################
+### Creates SID ###
+membership
+Column	        Type	Null	Default
+sid	            mediumint(8)	No	
+cid	            mediumint(8)	No	
+pid	            mediumint(8)	No	
+start	        date	No	
+end	            date	Yes	NULL
+
+####################################
+### Creates PMTID ###
+payment
+Column	        Type	Null	Default
+pmtid	        mediumint(8)	No	
+date	        date	Yes	NULL
+description	    varchar(255)	No	
+code	        varchar(8)	No	
+value	        mediumint(8)	No	
+credit	        mediumint(8)	No	
+debit	        mediumint(8)	No	
+method	        varchar(255)	No	
+confirmation	varchar(255)	No	
+notes	        text	No	
+created	        timestamp	No	CURRENT_TIMESTAMP
+
+####################################
+### Creates RID ###
+role
+Column	        Type	Null	Default
+rid	            mediumint(9)	No	
+name	        varchar(255)	No	
+
+####################################
+role_permission
+Column	        Type	Null	Default
+rid	            mediumint(8)	No	
+permission	    varchar(255)	No	
+
+####################################
+user
+Column	        Type	Null	Default
+cid	            mediumint(11)	No	
+username	    varchar(32)	No	
+hash	        varchar(40)	No	
+salt	        varchar(16)	No	
+
+####################################
+user_role
+Column	        Type	Null	Default
+cid	            mediumint(8)	No	
+rid	            mediumint(8)	No	
+
+####################################
+profile_picture
+Column	        Type	Null	Default
+cid	            mediumint(8)	No	
+filename	    varchar(255)	No	
+
+####################################
+resetpassword
+Column	        Type	Null	Default
+cid	            mediumint(8)	No	
+code	        varchar(40)	No	
+
+####################################
+accesslog
+Column	        Type	Null	Default
+id	            bigint(20)	No	
+swipetime	    timestamp	No	CURRENT_TIMESTAMP
+serial	        varchar(50)	No	
+access	        tinyint(1)	No	
+reason	        varchar(40)	Yes	NULL
+
+####################################
+contact_paypal
+Column	        Type	Null	Default
+cid	            mediumint(8)	No	
+email	        varchar(255)	No	
+
+#####################################
+member
+Column	        Type	Null	Default
+cid	            mediumint(8)	No	
+
+####################################
+### Creates PMTID ###
+payment_paypal
+Column	        Type	Null	Default
+pmtid	        mediumint(8)	No	
+email	        varchar(255)	Yes	NULL
+
+### Scratch pad used by various modules ###
+variable
+Column	        Type	Null	Default
+name	        varchar(255)	No	
+value	        text	No	
+
+####################################
+Unused tables retained for legacy
+####################################
+
+####################################
+payment_amazon
+Column	        Type	Null	Default
+pmtid	        mediumint(8)	No	
+amazon_name	    varchar(255)	No	
+
+####################################
+contact_amazon
+Column	        Type	Null	Default
+cid	            mediumint(8)	No	
+amazon_name	    varchar(255)	No	
+
+####################################
+### Creates DID ###
+module
+Column	        Type	Null	Default
+did	            mediumint(8)	No	
+name	        varchar(255)	No	
+revision	    mediumint(8)	No	
+

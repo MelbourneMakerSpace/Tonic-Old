@@ -73,7 +73,9 @@ private function hello(){
     echo str_replace("this","that","HELLO WORLD!!");
  
 }
-private function contact($_method,$param,$row){
+
+//Member is a Contact with a user/login, key, etc.
+private function member($_method,$param,$row){
     $dbconn = new mysqli(self::DB_SERVER,self::DB_USER,self::DB_PASSWORD,self::DB);
 
     if($this->get_request_method() == "GET"){
@@ -97,7 +99,9 @@ private function contact($_method,$param,$row){
             $json = json_encode($dt);
             echo $json;
     }
-
+// API/member/119
+// "_method":"PUT"
+// data: {}
         if($_method=="DELETE"){
             //$myDatabase= $this->db;// variable to access your database
             $sql = "delete from contact where cid = $param";
@@ -106,12 +110,40 @@ private function contact($_method,$param,$row){
 
         if($_method=="PUT"){
             //$myDatabase= $this->db;// variable to access your database
-            $sql = "insert into contact(stuff) values(stuff) ";
+            $jsonData = json_decode($_POST['data'],true);
+            $firstName = $jsonData['firstName'];
+            $lastName = $jsonData['lastName'];
+            $phone = $jsonData['phone'];
+            $email = $jsonData['email'];
+            $paypalEmail = $jsonData['paypalEmail'];
+            $emergencyName = $jsonData['emergencyName'];
+            $emergencyPhone = $jsonData['emergencyPhone'];
+            $emergencyEmail = $jsonData['emergencyEmail'];
+            
+            $sql = "insert into contact (firstName, lastName, phone, email, paypalEmail,
+            emergencyName, emergencyPhone, emergencyEmail) values ('$firstName',
+            '$lastName', '$phone', '$email', '$paypalEmail', '$emergencyName', 
+            '$emergencyPhone', '$emergencyEmail')";
             echo $sql;
         }
-        if($_method=="PATCH"){
+        if($_method=="POST"){
             //$myDatabase= $this->db;// variable to access your database
-            $sql = "update stuff";
+            
+            $jsonData = json_decode($_POST['data'],true);
+            $cid = $param;
+            $firstName = $jsonData['firstName'];
+            $lastName = $jsonData['lastName'];
+            $phone = $jsonData['phone'];
+            $email = $jsonData['email'];
+            $paypalEmail = $jsonData['paypalEmail'];
+            $emergencyName = $jsonData['emergencyName'];
+            $emergencyPhone = $jsonData['emergencyPhone'];
+            $emergencyEmail = $jsonData['emergencyEmail'];
+            
+            $sql = "update contact (firstName, lastName, phone, email, paypalEmail,
+            emergencyName, emergencyPhone, emergencyEmail) values ('$firstName',
+            '$lastName', '$phone', '$email', '$paypalEmail', '$emergencyName', 
+            '$emergencyPhone', '$emergencyEmail') WHERE cid = $cid";
             echo $sql;
         }
 
