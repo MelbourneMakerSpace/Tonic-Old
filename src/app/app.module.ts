@@ -17,9 +17,11 @@ import { MemberEditComponent } from "./components/member-edit/member-edit.compon
 import { MemberStatsComponent } from "./components/member-stats/member-stats.component";
 import { SortGridComponent } from "./components/sort-grid/sort-grid.component";
 import { OrderPipe } from "./pipes/sort.pipe";
-import { PlansGridComponent } from './components/plans-grid/plans-grid.component';
-import { KeysGridComponent } from './components/keys-grid/keys-grid.component';
+import { PlansGridComponent } from "./components/plans-grid/plans-grid.component";
+import { KeysGridComponent } from "./components/keys-grid/keys-grid.component";
+import { RestTestComponent } from "./components/rest-test/rest-test.component";
 
+import { HttpService } from "./services/http-service.service";
 
 @NgModule({
   declarations: [
@@ -38,11 +40,11 @@ import { KeysGridComponent } from './components/keys-grid/keys-grid.component';
     SortGridComponent,
     OrderPipe,
     PlansGridComponent,
-    KeysGridComponent
-
+    KeysGridComponent,
+    RestTestComponent
   ],
   imports: [BrowserModule, FormsModule, HttpModule, AppRoutingModule],
-  providers: [],
+  providers: [HttpService],
   bootstrap: [AppComponent]
 })
 export class AppModule {}
