@@ -21,6 +21,8 @@ export class LoginComponent implements OnInit {
   badLogin: boolean = false;
   testingLogin: boolean = false;
 
+  tmpstring: any;
+
   login: string;
   password: string;
   @ViewChild("txtLogin") txtLogin: ElementRef;
@@ -34,40 +36,15 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     this.renderer.invokeElementMethod(this.txtLogin.nativeElement, "focus");
+    this.login = "kirk";
+    this.password = "git gud";
   }
 
-  // tryLogin() {
-  //   this.testingLogin = true;
-  //   this.loginService.login(this.login, this.password).subscribe(
-  //     x => {
-  //       //localStorage.setItem("creds", JSON.stringify(x));
-
-  //       this.testingLogin = false;
-  //       if (this.route.snapshot.params["path"]) {
-  //         if (!this.route.snapshot.params["value"]) {
-  //           console.log(
-  //             `routing to path |${this.route.snapshot.params["path"]}|`
-  //           );
-  //           this.router.navigate([`/${this.route.snapshot.params["path"]}`]);
-  //         } else {
-  //           console.log(
-  //             `routing to path |${this.route.snapshot.params["path"]}/${this
-  //               .route.snapshot.params["value"]}|{`
-  //           );
-  //           this.router.navigate([
-  //             `/${this.route.snapshot.params["path"]}/${this.route.snapshot
-  //               .params["value"]}`
-  //           ]);
-  //         }
-  //       } else {
-  //         this.router.navigate(["/Dashboard"]);
-  //       }
-  //     },
-  //     error => {
-  //       this.badLogin = true;
-  //       this.testingLogin = false;
-  //       console.log(error);
-  //     }
-  //   );
-  //}
+  tryLogin() {
+    this.testingLogin = true;
+    this.loginService.login(this.login, this.password).subscribe(result => {
+      this.tmpstring = result;
+      console.dir(result);
+    });
+  }
 }
