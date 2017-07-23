@@ -1,11 +1,16 @@
 import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
 import { LoginComponent } from "./components/login/login.component";
+import { MemberEditComponent } from "./components/member-edit/member-edit.component";
 
 const routes: Routes = [
   {
     path: "",
     component: LoginComponent
+  },
+  {
+  	path: "member-edit",
+  	component: MemberEditComponent
   }
 ];
 
