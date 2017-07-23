@@ -5,6 +5,22 @@ This is the architecture document that describes how the database tables are int
 Events:
 1.) Login
 2.) Forgot password
+    SELECT * FROM user JOIN contact ON contact.cid=user.cid WHERE contact.email="weverest@navray.com"
+3a.) List active users
+    SELECT contact.cid, contact.firstName, contact.lastName, plan.name, contact.email, contact.phone, plan.active
+	FROM contact
+	LEFT JOIN membership
+	ON contact.cid=membership.cid
+	LEFT JOIN plan
+	ON membership.pid=plan.pid
+	WHERE plan.active=1
+3b.) List both active and inactive users
+    SELECT contact.cid, contact.firstName, contact.lastName, plan.name, contact.email, contact.phone, plan.active
+	FROM contact
+	LEFT JOIN membership
+	ON contact.cid=membership.cid
+	LEFT JOIN plan
+	ON membership.pid=plan.pid
 3.) Add User
 4.) Add/Modify Member Plan
 5.) Add payment method
