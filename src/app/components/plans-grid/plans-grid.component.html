@@ -1,0 +1,30 @@
+<div class="ui fluid">
+    <table class="ui celled table">
+        <thead>
+            <tr>
+                <th (click)="sortByColumn('name')">
+                    Plan Name
+                </th>
+                <th>
+                    Start Date
+                </th>
+                <th>
+                    End Date
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let plans of data | orderBy: sortColumn">
+                <td>
+                    {{plans.name}}
+                </td>
+                <td>
+                    {{plans.start}}
+                </td>
+                <td>
+                    {{plans.end}}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
