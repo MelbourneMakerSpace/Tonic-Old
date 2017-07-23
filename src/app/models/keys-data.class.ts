@@ -1,5 +1,5 @@
 export class KeysData {
-    Serial: number;
-    Added: Date;
-    Active: boolean;
+    serial: number;
+    added: Date;
+    active: boolean;
 }

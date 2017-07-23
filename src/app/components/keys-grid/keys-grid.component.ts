@@ -11,9 +11,9 @@ import { KeysData } from "../../models/keys-data.class";
 export class KeysGridComponent implements OnInit {
 
  data:KeysData[] = [
-    { Serial: 222, Added: new Date(2017, 10), Active: true },
-    { Serial: 333, Added: new Date(2017, 10), Active: true },
-    { Serial: 444, Added: new Date(2017, 10), Active: true }
+    { serial: 222, added: new Date(2017, 10), active: true },
+    { serial: 333, added: new Date(2017, 10), active: true },
+    { serial: 444, added: new Date(2017, 10), active: true }
 
   ];
   sortColumn: string = "Plan";

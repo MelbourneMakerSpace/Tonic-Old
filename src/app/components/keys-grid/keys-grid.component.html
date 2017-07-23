@@ -2,7 +2,7 @@
     <table class="ui celled table">
         <thead>
             <tr>
-                <th (click)="sortByColumn('Name')">
+                <th (click)="sortByColumn('serial')">
                     Serial
                 </th>
                 <th>
@@ -17,13 +17,13 @@
         <tbody>
             <tr *ngFor="let key of data | orderBy: sortColumn">
                 <td>
-                    {{key.Serial}}
+                    {{key.serial}}
                 </td>
                 <td>
-                    {{key.Added}}
+                    {{key.added}}
                 </td>
                 <td>
-                    {{key.Active}}
+                    {{key.active}}
                 </td>
               
             </tr>
