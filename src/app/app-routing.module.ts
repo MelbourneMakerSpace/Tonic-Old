@@ -3,6 +3,7 @@ import { Routes, RouterModule } from "@angular/router";
 import { LoginComponent } from "./components/login/login.component";
 import { MemberEditComponent } from "./components/member-edit/member-edit.component";
 import { SortGridComponent } from "./components/sort-grid/sort-grid.component";
+import { MemberListComponent } from "./components/member-list/member-list.component";
 
 const routes: Routes = [
   {
@@ -16,6 +17,10 @@ const routes: Routes = [
   {
     path: "grid",
     component: SortGridComponent
+  },
+  {
+    path: "members",
+    component: MemberListComponent
   }
 ];
 
