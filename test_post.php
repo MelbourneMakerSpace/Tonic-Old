@@ -12,7 +12,7 @@
 </form>
 
 
-<form action="API/member/135" method = "post">
+<form action="API/member/134" method = "post">
 <input type="hidden" name="_method" value="DELETE">
 <button type="submit" />DELETE</button>
 </form>
