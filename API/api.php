@@ -110,7 +110,7 @@ private function member($_method,$param,$row){
 
         if($_method=="PUT"){
             //$myDatabase= $this->db;// variable to access your database
-            $jsonData = json_decode($_POST['details'],true);
+            $jsonData = json_decode($_POST['data'],true);
             $firstName = $jsonData['firstName'];
             $lastName = $jsonData['lastName'];
             $phone = $jsonData['phone'];
@@ -129,8 +129,8 @@ private function member($_method,$param,$row){
         if($_method=="POST"){
             //$myDatabase= $this->db;// variable to access your database
             
-            $jsonData = json_decode($_POST['details'],true);
-            $cid = $jsonData['cid'];
+            $jsonData = json_decode($_POST['data'],true);
+            $cid = $param;
             $firstName = $jsonData['firstName'];
             $lastName = $jsonData['lastName'];
             $phone = $jsonData['phone'];
