@@ -1,0 +1,32 @@
+<div class="ui fluid">
+    <table class="ui celled table">
+        <thead>
+            <tr>
+                <th (click)="sortByColumn('serial')">
+                    Serial
+                </th>
+                <th>
+                    Added
+                </th>
+                <th>
+                    Active
+                </th>
+             
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let key of data | orderBy: sortColumn">
+                <td>
+                    {{key.serial}}
+                </td>
+                <td>
+                    {{key.added}}
+                </td>
+                <td>
+                    {{key.active}}
+                </td>
+              
+            </tr>
+        </tbody>
+    </table>
+</div>
