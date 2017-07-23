@@ -1,3 +1,4 @@
+
 <IfModule mod_rewrite.c>
     RewriteEngine On
  
@@ -9,8 +10,12 @@
     RewriteRule ^(.*)$ api.php [QSA,NC,L]
  
     RewriteCond %{REQUEST_FILENAME} -s
-    RewriteRule ^(.*)$ api.php [QSA,NC,L]   
+    RewriteRule ^(.*)$ api.php [QSA,NC,L]
+    Header add Access-Control-Allow-Origin "*" 
+
 </IfModule>
+
+
 
 <RequireAny>
     Require method DELETE GET POST PUT OPTIONS

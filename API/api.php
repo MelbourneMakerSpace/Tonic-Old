@@ -1,11 +1,16 @@
 <?php
-//ini_set('display_errors', 1); 
+ini_set('display_errors', 1); 
 // ini_set('display_startup_errors', 1); 
-// error_reporting(E_ALL);
+error_reporting(E_ALL);
 // header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0"); 
 // header("Cache-Control: post-check=0, pre-check=0", false); 
 // header("Pragma: no-cache");
 require_once("Rest.inc.php");
+header('Access-Control-Allow-Origin: *'); 
+    header("Access-Control-Allow-Credentials: true");
+    header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
+    header('Access-Control-Max-Age: 1000');
+    header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token , Authorization');
 
 
 class API extends REST {
@@ -27,7 +32,7 @@ class API extends REST {
 private function dbConnect(){
         $this->db = mysqli_connect(self::DB_SERVER,self::DB_USER,self::DB_PASSWORD);
         if($this->db)
-            mysql_select_db("members",$this->db);
+            mysqli_select_db($this->db,self::DB);
 }
      
     /*
@@ -60,10 +65,16 @@ public function processApi(){
             $param = $funcArray[2];
         }
         
-        if((int)method_exists($this,$func) > 0 && !$param)
+
+        if((int)method_exists($this,$func) > 0 && (!isset($param) || strlen($param)==0) && !isset($row))
             $this->$func($_method);
-        else if((int)method_exists($this,$func) > 0 && $param)
+
+        else if((int)method_exists($this,$func) > 0 && $param && !isset($row))
+            $this->$func($_method,$param);
+
+        else if((int)method_exists($this,$func) > 0 && $param && $row)
             $this->$func($_method,$param,$row);
+
         else
             $this->response('Error code 404, Page not found',404);   // If the method not exist with in this class, response would be "Page not found".
 }
@@ -75,7 +86,7 @@ private function hello(){
 }
 
 //Member is a Contact with a user/login, key, etc.
-private function member($_method,$param,$row){
+private function member($_method,$param = '',$row = ''){
     $dbconn = new mysqli(self::DB_SERVER,self::DB_USER,self::DB_PASSWORD,self::DB);
 
     if($this->get_request_method() == "GET"){
@@ -105,10 +116,17 @@ private function member($_method,$param,$row){
         if($_method=="DELETE"){
             //$myDatabase= $this->db;// variable to access your database
             $sql = "delete from contact where cid = $param";
-            echo $sql;
+            $result = $dbconn->query($sql);
+             if (!$result){
+                 echo '{"response":"false"}';
+             }
+
+             else{
+                 echo '{"response":"true"}';
+             }
         }
 
-        if($_method=="PUT"){
+        if($_method=="POST"){
             //$myDatabase= $this->db;// variable to access your database
             $jsonData = json_decode($_POST['data'],true);
             $firstName = $jsonData['firstName'];
@@ -119,14 +137,44 @@ private function member($_method,$param,$row){
             $emergencyName = $jsonData['emergencyName'];
             $emergencyPhone = $jsonData['emergencyPhone'];
             $emergencyEmail = $jsonData['emergencyEmail'];
+            $password = $jsonData['password'];
+            $rid = $jsonData['rid'];
+           
             
             $sql = "insert into contact (firstName, lastName, phone, email, paypalEmail,
             emergencyName, emergencyPhone, emergencyEmail) values ('$firstName',
             '$lastName', '$phone', '$email', '$paypalEmail', '$emergencyName', 
             '$emergencyPhone', '$emergencyEmail')";
-            echo $sql;
+             $result = $dbconn->query($sql);
+
+            $sql = "select cid from contact where firstName = '$firstName' and lastName = '$lastName' and phone = '$phone'
+             and email = '$email' and paypalEmail = '$paypalEmail' and emergencyName = '$emergencyName' and emergencyPhone='$emergencyPhone'
+             and emergencyEmail= '$emergencyEmail'";
+            $result = $dbconn->query($sql);
+            $dt = array();
+            $row = $result->fetch_array();
+            $cid = $row[0];
+            //TODO; Do this first, and if there is already a cid, user already exists
+
+            // hash the Password. Username is the email.
+            $hash = password_hash($password, PASSWORD_DEFAULT);
+            $sql = "insert into user set username = '$email', hash = '$hash', cid = '$cid'";
+            $result = $dbconn->query($sql);
+            
+
+            $sql = "insert into user_role (rid, cid) values ($rid,$cid)";
+            $result = $dbconn->query($sql);
+
+             if (!$result){
+                 echo '{"response":"false"}';
+             }
+
+             else{
+                 echo '{"response":"true"}';
+             }
+
         }
-        if($_method=="POST"){
+        if($_method=="PUT"){
             //$myDatabase= $this->db;// variable to access your database
             
             $jsonData = json_decode($_POST['data'],true);
@@ -140,28 +188,35 @@ private function member($_method,$param,$row){
             $emergencyPhone = $jsonData['emergencyPhone'];
             $emergencyEmail = $jsonData['emergencyEmail'];
             
-            $sql = "update contact (firstName, lastName, phone, email, paypalEmail,
-            emergencyName, emergencyPhone, emergencyEmail) values ('$firstName',
-            '$lastName', '$phone', '$email', '$paypalEmail', '$emergencyName', 
-            '$emergencyPhone', '$emergencyEmail') WHERE cid = $cid";
+            if(isset($jsonData['password'])){
+            $password = $jsonData['password'];
+            $hash = password_hash($password, PASSWORD_DEFAULT);
+            echo $hash;
+            $sql = "update user set hash = '$hash' and username = '$email' where cid = $cid";
+            $result = $dbconn->query($sql);
             echo $sql;
+            }
+    
+
+            $sql = "update contact set firstName = '$firstName', lastName = '$lastName', phone = '$phone', email = '$email', paypalEmail = '$paypalEmail',
+            emergencyName = '$emergencyName',emergencyPhone='$emergencyPhone',emergencyEmail= '$emergencyEmail' where cid = $cid";
+            $result = $dbconn->query($sql);
+            if (!$result){
+                 echo '{"response":"false"}';
+             }
+
+            else{
+                 echo '{"response":"true"}';
+             }
         }
+
+        //TODO: Password Reset.
 
     
 }
 
 private function login(){
 
-    /*
-function user_check_password($password, $user) {
-    if (!empty($user['hash'])) {
-        if (user_hash($password, $user['salt']) === $user['hash']) {
-            return true;
-        }
-    }
-    return false;
-}
-*/
     $dbconn = new mysqli(self::DB_SERVER,self::DB_USER,self::DB_PASSWORD,self::DB);
     
     if($this->get_request_method() == "POST"){
