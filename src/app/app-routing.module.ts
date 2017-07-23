@@ -4,12 +4,9 @@ import { LoginComponent } from "./components/login/login.component";
 import { MemberEditComponent } from "./components/member-edit/member-edit.component";
 import { SortGridComponent } from "./components/sort-grid/sort-grid.component";
 import { MemberListComponent } from "./components/member-list/member-list.component";
-<<<<<<< HEAD
 import { PlansGridComponent } from "./components/plans-grid/plans-grid.component";
-=======
 import { MemberPaymentsComponent } from "./components/member-payments/member-payments.component";
-import {KeysGridComponent} from "./components/keys-grid/keys-grid.component"
->>>>>>> 06cc1787c32db1a67c1deefa573952be5ac7b219
+import { KeysGridComponent } from "./components/keys-grid/keys-grid.component";
 
 const routes: Routes = [
   {
@@ -29,10 +26,6 @@ const routes: Routes = [
     component: MemberListComponent
   },
   {
-<<<<<<< HEAD
-    path: "plans",
-    component: PlansGridComponent
-=======
     path: "members",
     component: MemberListComponent
   },
@@ -43,9 +36,7 @@ const routes: Routes = [
   {
     path: "keys",
     component: KeysGridComponent
->>>>>>> 06cc1787c32db1a67c1deefa573952be5ac7b219
   }
-
 ];
 
 @NgModule({
