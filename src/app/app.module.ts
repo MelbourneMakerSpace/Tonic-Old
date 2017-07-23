@@ -5,9 +5,10 @@ import { HttpModule } from "@angular/http";
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { LoginComponent } from "./components/login/login.component";
+import { MenuComponent } from './components/menu/menu.component';
 
 @NgModule({
-  declarations: [AppComponent, LoginComponent],
+  declarations: [AppComponent, LoginComponent, MenuComponent],
   imports: [BrowserModule, FormsModule, HttpModule, AppRoutingModule],
   providers: [],
   bootstrap: [AppComponent]
