@@ -4,6 +4,7 @@ import { LoginComponent } from "./components/login/login.component";
 import { MemberEditComponent } from "./components/member-edit/member-edit.component";
 import { SortGridComponent } from "./components/sort-grid/sort-grid.component";
 import { MemberListComponent } from "./components/member-list/member-list.component";
+import { MemberPaymentsComponent } from "./components/member-payments/member-payments.component";
 
 const routes: Routes = [
   {
@@ -21,6 +22,14 @@ const routes: Routes = [
   {
     path: "members",
     component: MemberListComponent
+  },
+  {
+    path: "members",
+    component: MemberListComponent
+  },
+  {
+    path: "payment",
+    component: MemberPaymentsComponent
   }
 ];
 
