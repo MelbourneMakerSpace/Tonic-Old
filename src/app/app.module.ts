@@ -14,6 +14,7 @@ import { MemberKeysComponent } from "./components/member-keys/member-keys.compon
 import { MemberPaymentsComponent } from "./components/member-payments/member-payments.component";
 import { MemberPictureComponent } from "./components/member-picture/member-picture.component";
 import { MemberEditComponent } from "./components/member-edit/member-edit.component";
+import { MemberStatsComponent } from './components/member-stats/member-stats.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { MemberEditComponent } from "./components/member-edit/member-edit.compon
     MemberKeysComponent,
     MemberPaymentsComponent,
     MemberPictureComponent,
-    MemberEditComponent
+    MemberEditComponent,
+    MemberStatsComponent
   ],
   imports: [BrowserModule, FormsModule, HttpModule, AppRoutingModule],
   providers: [],
