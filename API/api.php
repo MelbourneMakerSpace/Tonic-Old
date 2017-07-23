@@ -15,8 +15,8 @@ if (array_key_exists('HTTP_ORIGIN', $_SERVER)) {
     header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
     header('Access-Control-Max-Age: 1000');
     header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token , Authorization');
-$message = file_get_contents('php://input');
-error_log($message,3,'log.log');
+//$message = file_get_contents('php://input');
+//error_log($message,3,'var/logs/php/log.log');
 
 class API extends REST {
      
