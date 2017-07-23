@@ -2,6 +2,7 @@ import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
 import { LoginComponent } from "./components/login/login.component";
 import { MemberEditComponent } from "./components/member-edit/member-edit.component";
+import { SortGridComponent } from "./components/sort-grid/sort-grid.component";
 
 const routes: Routes = [
   {
@@ -9,8 +10,12 @@ const routes: Routes = [
     component: LoginComponent
   },
   {
-  	path: "member-edit",
-  	component: MemberEditComponent
+    path: "member-edit",
+    component: MemberEditComponent
+  },
+  {
+    path: "grid",
+    component: SortGridComponent
   }
 ];
 
