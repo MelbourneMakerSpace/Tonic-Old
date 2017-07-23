@@ -1,11 +1,25 @@
 import { Injectable, EventEmitter } from "@angular/core";
-import { Observable, Subject } from "rxjs/rx";
+import { environment } from "../../environments/environment";
+import { Observable } from "rxjs/rx";
+import { Http, Response, RequestOptions, Headers } from "@angular/http";
 
 @Injectable()
 export class LoginService {
-  constructor() {}
+  constructor(private http: Http) {}
 
-  login(email: string, password: string) {}
+  login(email: string, password: string): Observable<Response> {
+    let results: any;
+
+    var options = new RequestOptions({
+      headers: new Headers({
+        "Content-Type": "application/x-www-form-urlencoded"
+      })
+    });
+
+    let body = `Content-Disposition: form-data; name="credentials"{"username":"${email}","password":"${password}"}`;
+
+    return this.http.post(environment.APIURL + "login", body, options);
+  }
 
   logout() {}
 }
