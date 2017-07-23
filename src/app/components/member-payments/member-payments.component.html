@@ -1,49 +1,49 @@
-  <div class="ui grid">
-  <div class="four wide column">
-<table class="table table-bordered">
-  <thead>
-    <tr><th>Date</th>
-    <th>Description</th>
-    <th>Amount</th>
-    <th>Method</th>
-    <th>Confirmation</th>
-    <th>Notes</th>
-  </tr></thead>
-  <tbody>
+<div class="ui fluid">
+  <table class="ui celled table">
+    <thead>
     <tr>
-      <td>1-2-17</td>
-      <td>None</td>
-      <td>15</td>
-      <td>Cash</td>
-      <td>yes</td>
-      <td>-</td>
+      <th (click)="sortByColumn('Date')">
+        Date
+      </th>
+      <th (click)="sortByColumn('Description')">
+        Description
+      </th>
+      <th (click)="sortByColumn('Amount')">
+        Amount
+      </th>
+      <th (click)="sortByColumn('Method')">
+        Method
+      </th>
+      <th (click)="sortByColumn('Confirmation')">
+        Confirmation
+      </th>
+      <th (click)="sortByColumn('Notes')">
+        Notes
+      </th>
     </tr>
-    <tr>
-      <td>1-2-17</td>
-      <td>None</td>
-      <td>15</td>
-      <td>Credit Card</td>
-      <td>yes</td>
-      <td>-</td>
+    </thead>
+    <tbody>
+    <tr *ngFor="let member of data | orderBy: sortColumn">
+      <td>
+        {{member.Date}}
+      </td>
+      <td>
+        {{member.Description}}
+      </td>
+      <td>
+        {{member.Amount}}
+      </td>
+      <td>
+        {{member.Method}}
+      </td>
+      <td>
+        {{member.Confirmation}}
+      </td>
+      <td>
+        {{member.Notes}}
+      </td>
     </tr>
-    <tr>
-      <td>1-2-17</td>
-      <td>None</td>
-      <td>15</td>
-      <td>Cash</td>
-      <td>yes</td>
-      <td>-</td>
-    </tr>
-   <tr>
-      <td>1-2-17</td>
-      <td>None</td>
-      <td>15</td>
-      <td>Cash</td>
-      <td>yes</td>
-      <td>-</td>
-    </tr>
-</tbody></table>
-
+    </tbody>
+  </table>
 </div>
 
-</div>

@@ -1,72 +1,26 @@
 import { Component, OnInit } from "@angular/core";
 import { OrderPipe } from "../../pipes/sort.pipe";
 
+import { Member } from "../../models/member-data.class";
+
 @Component({
   selector: "app-sort-grid",
   templateUrl: "./sort-grid.component.html",
   styleUrls: ["./sort-grid.component.css"]
 })
 export class SortGridComponent implements OnInit {
-  data: Array<Member> = new Array<Member>();
+  data:Member[] = [
+    { Name: "Tony Bellomo", Email: "tony.bellomo@gmail.com", Plan: "full", Balance: 0.0, Status: "Active", Phone: "555-1234" },
+    { Name: "Tony Bellomo2", Email: "tony.bellomo@gmail.com", Plan: "half", Balance: 5.0, Status: "Active", Phone: "555-1234" },
+    { Name: "Tony Bellomo3", Email: "tony.bellomo@gmail.com", Plan: "full", Balance: 20.0, Status: "Disabled", Phone: "555-1234" }
+  ];
   sortColumn: string = "Plan";
 
-  constructor() {
-    this.data.push(
-      new Member(
-        "Tony Bellomo",
-        "tony.bellomo@gmail.com",
-        "full",
-        0.0,
-        "Active",
-        "555-1234"
-      ),
-      new Member(
-        "Tony Bellomo2",
-        "tony.bellomo@gmail.com",
-        "Half",
-        5.0,
-        "Active",
-        "555-1234"
-      ),
-      new Member(
-        "Tony Bellomo3",
-        "tony.bellomo@gmail.com",
-        "Free",
-        20.0,
-        "Disabled",
-        "555-1234"
-      )
-    );
-  }
+  constructor() {}
 
   ngOnInit() {}
 
   sortByColumn(sortByColumn: string) {
     this.sortColumn = sortByColumn;
-  }
-}
-
-export class Member {
-  Name: string;
-  Email: string;
-  Plan: string;
-  Balance: number;
-  Status: string;
-  Phone: string;
-
-  constructor(
-    Name: string,
-    Email: string,
-    Plan: string,
-    Balance: number,
-    Status: string,
-    Phone: string
-  ) {
-    this.Name = Name;
-    this.Email = Email;
-    this.Plan = Plan;
-    this.Balance = Balance;
-    this.Status = Status;
-    this.Phone = Phone;
   }
 }

@@ -1,0 +1,58 @@
+Sudo Code      //   json data ---> { propName: value, propName, propName: value }
+
+
+/*
+    CURRENT DRAFT: VERSION 1
+*/
+
+
+
+
+routes:                verb            modelFunc()          incomingJson                          serveContent: (or json)
+
+############### Login Page Routes #########################################################################################################
+
+
+    /         --->     get             ???start()???            ????                                index.html
+
+
+    /login    --->     post             login()        { email: '', password: ''}     { session_ID: '' || 'false', data:'' })
+
+    /forgot/<email> --> get             forgot(email)         none                     { bool: true/false, data: ["Error" || "Email sent"] }
+
+
+    /manager        --> get             manager()       requestpayLoadhasCookie       { permissions: '', memeberList: [{ id: '', name: '', plan: '', email: '', phone: '', balance: integer, status: '' }, {}] }
+
+    /manager        --> post            manager()       requestpayLoadhasCookie             same as above
+
+
+    /*
+          All the requests to server for /details... are in the url.
+          Data being returned to client is the JSON data listed below.
+    */
+
+
+    /details        --> post            MemeberDetails()  requestPayLoadhasCookie           code_Below
+          {
+            permissions: '',
+            memberDetails: {name:'', phone: int, email:'', payPal: ''},
+            memberEmergency: {name: '', email: '', phone: ''}.
+            picture: {img: imgFILE},
+            stats: { memberSince: date, balance: float }
+          }
+    /details/plans/<id> --> get
+          {
+            permissions: '',
+            memberEmergency: {name: '', email: '', phone: ''},
+            plans: [{name: '', start: date, end: date}]
+          }
+    /details/keys/<id> ---> get
+          {
+            permissions: '',
+            keys: [{serial: int, active: 0||1, }],
+          }
+    /details/payments/<id> ---> get
+          {
+            permissions: '',
+            payments: [{date: date, description: '', amount: int, method: '', confirmation: 'yes/no', notes: ''}],
+          }
