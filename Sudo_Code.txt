@@ -26,14 +26,33 @@ routes:                verb            modelFunc()          incomingJson        
     /manager        --> post            manager()       requestpayLoadhasCookie             same as above
 
 
-    /details        --> post            MemeberDetails()  requestPayLoadhasCookie           below
+    /*
+          All the requests to server for /details... are in the url.
+          Data being returned to client is the JSON data listed below.
+    */
+
+
+    /details        --> post            MemeberDetails()  requestPayLoadhasCookie           code_Below
           {
             permissions: '',
             memberDetails: {name:'', phone: int, email:'', payPal: ''},
-            memberEmergency: {name: '', email: '', phone: ''},
-            plans: [{name: '', start: date, end: date}],
-            keys: [{serial: int, active: 0||1, }],
-            payments: [{date: date, description: '', amount: int, method: '', confirmation: 'yes/no', notes: ''}],
-            picture: {img: imgFILE}, stats: { memberSince: date, balance: float }
+            memberEmergency: {name: '', email: '', phone: ''}.
+            picture: {img: imgFILE},
+            stats: { memberSince: date, balance: float }
           }
-    
+    /details/plans/<id> --> get
+          {
+            permissions: '',
+            memberEmergency: {name: '', email: '', phone: ''},
+            plans: [{name: '', start: date, end: date}]
+          }
+    /details/keys/<id> ---> get
+          {
+            permissions: '',
+            keys: [{serial: int, active: 0||1, }],
+          }
+    /details/payments/<id> ---> get
+          {
+            permissions: '',
+            payments: [{date: date, description: '', amount: int, method: '', confirmation: 'yes/no', notes: ''}],
+          }
