@@ -4,7 +4,7 @@
     }
 </style>
 <div class="ui container">
-    <app-menu></app-menu>
+    tmp string:{{tmpstring|json}}
     <div class="ui grid">
         <div class="row" style="height:100vh">
             <div class="ui middle aligned centered four wide column" style="min-width: 300px">
@@ -15,7 +15,7 @@
                             <img class="ui centered image" style="position:relative;left:5px;height:5rem;" src="./assets/img/Logo.jpg" alt="Tonic Logo">
                         </div>
                         <div class="ui centered row input">
-                            <input placeholder="User ID" type="email" email required [(ngModel)]="login" name="txtLogin" id="IMALogin" #txtLogin />
+                            <input placeholder="User ID" type="text" required [(ngModel)]="login" name="txtLogin" id="IMALogin" #txtLogin />
                         </div>
                         <div class="ui centered row input" [class.error]="txtPassword">
                             <input placeholder="Password" type="password" [(ngModel)]="password" name="txtPassword" minlength="4" required (keyup.enter)="tryLogin()" />

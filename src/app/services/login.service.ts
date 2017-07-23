@@ -16,7 +16,7 @@ export class LoginService {
       })
     });
 
-    let body = `Content-Disposition: form-data; name="credentials"{"username":"${email}","password":"${password}"}`;
+    let body = `credentials={"username":"${email}","password":"${password}"}`;
 
     return this.http.post(environment.APIURL + "login", body, options);
   }
