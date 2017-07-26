@@ -85,8 +85,8 @@ public function processApi(){
 }
 
 
-private function hello(){
-    echo str_replace("this","that","HELLO WORLD!!");
+private function rewrite(){
+    echo str_replace("this","that","Tonic API Rewriting Working!");
  
 }
 
@@ -95,9 +95,6 @@ private function member($_method,$param = '',$col = ''){
     $dbconn = new mysqli(self::DB_SERVER,self::DB_USER,self::DB_PASSWORD,self::DB);
 
     if($this->get_request_method() == "GET"){
-
-
-
             //$myDatabase= $this->db;// variable to access your database
         if(!$param && !$col){
             $sql = "SELECT * from contact";
@@ -289,15 +286,15 @@ private function login(){
 }
      
  
-private function test(){    
+private function APIDBTest(){    
     // Cross validation if the request method is GET else it will return "Not Acceptable" status
     if($this->get_request_method() != "GET"){
         $this->response('',406);
     }
     $myDatabase= $this->db;// variable to access your database
-    $param=$this->_request['var'];
+    //$param=$this->_request['var'];
     // If success everythig is good send header as "OK" return param
-    $this->response($param, 200);    
+    $this->response("DB Test Completed", 200);    
 }
  
      
