@@ -19,8 +19,12 @@
         }
          
         public function response($data,$status){
+            
+            
             $this->_code = ($status)?$status:200;
+            
             $this->set_headers();
+            
             echo $data;
             exit;
         }

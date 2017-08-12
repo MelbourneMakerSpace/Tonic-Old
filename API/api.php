@@ -6,6 +6,9 @@ error_reporting(E_ALL);
 // header("Cache-Control: post-check=0, pre-check=0", false); 
 // header("Pragma: no-cache");
 require_once("Rest.inc.php");
+
+
+
 if (array_key_exists('HTTP_ORIGIN', $_SERVER)) {
     $http_origin = $_SERVER['HTTP_ORIGIN'];
         header("Access-Control-Allow-Origin: $http_origin");
@@ -49,17 +52,21 @@ public function processApi(){
 
         //If we are posting a method (update, delete, etc)
         if(isset($_POST['_method']))
+        {
             $_method = $_POST['_method'];
-
-        //if no method is posted, assume a read
+        }
+         //if no method is posted, assume a read
         else
+        {
             $_method = "READ";
+        }
 
-
-        
+                   
 
         $funcArray = explode("/",$_REQUEST['rquest']);
         $func = $funcArray[0];
+
+        
 
         if(count($funcArray) == 2)
             $param = $funcArray[1];
@@ -69,19 +76,31 @@ public function processApi(){
             $col = $funcArray[1];
             $param = $funcArray[2];
         }
-        
+         
+        //echo "method exists:" . (int)method_exists($this,$func);
+       // exit;
 
         if((int)method_exists($this,$func) > 0 && (!isset($param) || strlen($param)==0) && !isset($col))
+        {
             $this->$func($_method);
-
+            
+        }
         else if((int)method_exists($this,$func) > 0 && $param && !isset($col))
+        {   
             $this->$func($_method,$param);
-
+            
+        }
         else if((int)method_exists($this,$func) > 0 && $param && $col)
-            $this->$func($_method,$param,$col);
-
+        {    $this->$func($_method,$param,$col);
+            
+        }
         else
-            $this->response('Error code 404, Page not found',404);   // If the method not exist with in this class, response would be "Page not found".
+        {    
+            
+            $this->response("{\"error\":\"Error code 404, Page not found\"}",404);
+            
+               // If the method not exist with in this class, response would be "Page not found".
+        }
 }
 
 
@@ -309,7 +328,9 @@ private function APIDBTest(){
 }
  
     // Initiiate Library
-     
+
     $api = new API;
+
     $api->processApi();
+             
 ?>
