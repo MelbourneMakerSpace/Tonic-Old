@@ -6,6 +6,8 @@ error_reporting(E_ALL);
 // header("Cache-Control: post-check=0, pre-check=0", false); 
 // header("Pragma: no-cache");
 require_once("Rest.inc.php");
+require_once("dbObject.php");
+
 
 
 
@@ -30,17 +32,18 @@ class API extends REST {
     const DB_PASSWORD = "Makerspace1";
     const DB = "Tonic";
      
-    private $db = NULL;
- 
+    //private $db = NULL;
+    private $dbconn = NULL;
+
     public function __construct(){
         parent::__construct();              // Init parent contructor
         $this->dbConnect();                 // Initiate Database connection
 }
      
 private function dbConnect(){
-        $this->db = mysqli_connect(self::DB_SERVER,self::DB_USER,self::DB_PASSWORD);
-        if($this->db)
-            mysqli_select_db($this->db,self::DB);
+        $this->dbconn = mysqli_connect(self::DB_SERVER,self::DB_USER,self::DB_PASSWORD);
+        if($this->dbconn)
+            mysqli_select_db($this->dbconn,self::DB);
 }
      
     /*
@@ -50,7 +53,7 @@ private function dbConnect(){
      * http://192.168.1.7/methodname/keyValue/column?
      */
 public function processApi(){
-
+        $this->dbconn = new mysqli(self::DB_SERVER,self::DB_USER,self::DB_PASSWORD,self::DB);     
         //If we are posting a method (update, delete, etc)
         if(isset($_POST['_method']))
         {
@@ -104,138 +107,147 @@ public function processApi(){
         }
 }
 
-
 private function rewrite(){
     echo str_replace("this","that","Tonic API Rewriting Working!");
  
 }
 
-//Member is a Contact with a user/login, key, etc.
-private function member($_method,$param = '',$col = ''){
-    $dbconn = new mysqli(self::DB_SERVER,self::DB_USER,self::DB_PASSWORD,self::DB);
-
-    // echo "param:" . $param . " col:" . $col;
-    // exit;
+private function key($_method,$param = '',$col = ''){
+    $dbobj = new dbObject("key", "kid", $this->dbconn);
 
     if($this->get_request_method() == "GET"){
-            //$myDatabase= $this->db;// variable to access your database
+        //$myDatabase= $this->db;// variable to access your database
+        if(!$param && !$col){
+            $dbobj->getList();
+        }
+        else if($param && !$col){
+            $dbobj->getSingle($param);
+        }
+    }
+    if($this->get_request_method() == "DELETE"){
+        $dbobj->delete($param);
+    }
+}
+
+//Member is a Contact with a user/login, key, etc.
+private function member($_method,$param = '',$col = ''){
+
+
+    //$dbconn = new mysqli(self::DB_SERVER,self::DB_USER,self::DB_PASSWORD,self::DB);
+
+    if($this->get_request_method() == "GET"){
+        //$myDatabase= $this->db;// variable to access your database
         if(!$param && !$col){
             $stmt = "SELECT * from contact";
             
         if(isset($_POST['getInactive'])){
-                $stmt = "SELECT contact.cid, contact.firstName, contact.lastName, plan.name, contact.email, contact.phone, plan.active
-                FROM contact
-                LEFT JOIN membership
-                ON contact.cid=membership.cid
-                LEFT JOIN plan
-                ON membership.pid=plan.pid
-                WHERE plan.active=1";
-                }
-        else{
-                $stmt = "SELECT contact.cid, contact.firstName, contact.lastName, plan.name, contact.email, contact.phone, plan.active
-                        FROM contact
-                        LEFT JOIN membership
-                        ON contact.cid=membership.cid
-                        LEFT JOIN plan
-                        ON membership.pid=plan.pid";
+            $stmt = "SELECT contact.cid, contact.firstName, contact.lastName, plan.name, contact.email, contact.phone, plan.active
+            FROM contact
+            LEFT JOIN membership
+            ON contact.cid=membership.cid
+            LEFT JOIN plan
+            ON membership.pid=plan.pid
+            WHERE plan.active=1";
             }
-            $sql = $dbconn->prepare($stmt);            
+        else
+        {
+            $stmt = "SELECT contact.cid, contact.firstName, contact.lastName, plan.name, contact.email, contact.phone, plan.active
+                    FROM contact
+                    LEFT JOIN membership
+                    ON contact.cid=membership.cid
+                    LEFT JOIN plan
+                    ON membership.pid=plan.pid";
+        }
+        $sql = $this->dbconn->prepare($stmt);            
+    }
+    else if($param && !$col){
+        $sql = $this->dbconn->prepare("SELECT * from contact where cid = ?");
+        $sql->bind_param("i", $param);
+        //$sql = "SELECT * from contact where cid = $param";
+    }
+    else if($param && $col){
+        echo "not implemented!";
+        exit;
+        // $statement = "SELECT * from contact where ? = '?'";
+        // $sql = $dbconn->prepare($statement);   
+        // $sql->bind_param("s", $col);
+        // $sql->bind_param("s", $param);
+        // echo($sql->fullQuery);
+        // exit;
+        // $sql->execute();
+    }   
+        //$result = $dbconn->query($sql);
+        $sql->execute();            
+        $result = $sql->get_result();
+        $dt = array();
+        while($row = $result->fetch_assoc()){
+            array_push($dt, $row);
+        }
+        $json = json_encode($dt);
+        echo $json;
+    }
+    // API/member/119
+    // "_method":"PUT"
+    // data: {}
+    if($_method=="DELETE"){
+        //$myDatabase= $this->db;// variable to access your database
+        $sql = "delete from contact where cid = $param";
+        $result = $this->dbconn->query($sql);
+            if (!$result){
+                echo '{"response":"false"}';
+            }
+
+            else{
+                echo '{"response":"true"}';
+            }
     }
 
-        else if($param && !$col){
-            $sql = $dbconn->prepare("SELECT * from contact where cid = ?");
-            $sql->bind_param("i", $param);
-            //$sql = "SELECT * from contact where cid = $param";
-        }
+    if($_method=="POST"){
+        //$myDatabase= $this->db;// variable to access your database
+        $jsonData = json_decode($_POST['data'],true);
+        $firstName = $jsonData['firstName'];
+        $lastName = $jsonData['lastName'];
+        $phone = $jsonData['phone'];
+        $email = $jsonData['email'];
+        $paypalEmail = $jsonData['paypalEmail'];
+        $emergencyName = $jsonData['emergencyName'];
+        $emergencyPhone = $jsonData['emergencyPhone'];
+        $emergencyEmail = $jsonData['emergencyEmail'];
+        $password = $jsonData['password'];
+        $rid = $jsonData['rid'];
+        
+        
+        $sql = "insert into contact (firstName, lastName, phone, email, paypalEmail,
+        emergencyName, emergencyPhone, emergencyEmail) values ('$firstName',
+        '$lastName', '$phone', '$email', '$paypalEmail', '$emergencyName', 
+        '$emergencyPhone', '$emergencyEmail')";
+            $result = $this->dbconn->query($sql);
 
-        else if($param && $col){
-            echo "not implemented!";
-            exit;
-            
-            // $statement = "SELECT * from contact where ? = '?'";
-            // $sql = $dbconn->prepare($statement);   
+        $sql = "select cid from contact where firstName = '$firstName' and lastName = '$lastName' and phone = '$phone'
+            and email = '$email' and paypalEmail = '$paypalEmail' and emergencyName = '$emergencyName' and emergencyPhone='$emergencyPhone'
+            and emergencyEmail= '$emergencyEmail'";
+        $result = $this->dbconn->query($sql);
+        $dt = array();
+        $row = $result->fetch_array();
+        $cid = $row[0];
+        //TODO; Do this first, and if there is already a cid, user already exists
 
-            
+        // hash the Password. Username is the email.
+        $hash = password_hash($password, PASSWORD_DEFAULT);
+        $sql = "insert into user set username = '$email', hash = '$hash', cid = '$cid'";
+        $result = $this->dbconn->query($sql);
+        
 
-            // $sql->bind_param("s", $col);
-            // $sql->bind_param("s", $param);
+        $sql = "insert into user_role (rid, cid) values ($rid,$cid)";
+        $result = $this->dbconn->query($sql);
 
-            // echo($sql->fullQuery);
-            // exit;
-            // $sql->execute();
-        }
-            //$result = $dbconn->query($sql);
-            $sql->execute();            
-            $result = $sql->get_result();
-            $dt = array();
-            while($row = $result->fetch_assoc()){
-                array_push($dt, $row);
+            if (!$result){
+                echo '{"response":"false"}';
             }
-            $json = json_encode($dt);
-            echo $json;
-    }
-// API/member/119
-// "_method":"PUT"
-// data: {}
-        if($_method=="DELETE"){
-            //$myDatabase= $this->db;// variable to access your database
-            $sql = "delete from contact where cid = $param";
-            $result = $dbconn->query($sql);
-             if (!$result){
-                 echo '{"response":"false"}';
-             }
 
-             else{
-                 echo '{"response":"true"}';
-             }
-        }
-
-        if($_method=="POST"){
-            //$myDatabase= $this->db;// variable to access your database
-            $jsonData = json_decode($_POST['data'],true);
-            $firstName = $jsonData['firstName'];
-            $lastName = $jsonData['lastName'];
-            $phone = $jsonData['phone'];
-            $email = $jsonData['email'];
-            $paypalEmail = $jsonData['paypalEmail'];
-            $emergencyName = $jsonData['emergencyName'];
-            $emergencyPhone = $jsonData['emergencyPhone'];
-            $emergencyEmail = $jsonData['emergencyEmail'];
-            $password = $jsonData['password'];
-            $rid = $jsonData['rid'];
-           
-            
-            $sql = "insert into contact (firstName, lastName, phone, email, paypalEmail,
-            emergencyName, emergencyPhone, emergencyEmail) values ('$firstName',
-            '$lastName', '$phone', '$email', '$paypalEmail', '$emergencyName', 
-            '$emergencyPhone', '$emergencyEmail')";
-             $result = $dbconn->query($sql);
-
-            $sql = "select cid from contact where firstName = '$firstName' and lastName = '$lastName' and phone = '$phone'
-             and email = '$email' and paypalEmail = '$paypalEmail' and emergencyName = '$emergencyName' and emergencyPhone='$emergencyPhone'
-             and emergencyEmail= '$emergencyEmail'";
-            $result = $dbconn->query($sql);
-            $dt = array();
-            $row = $result->fetch_array();
-            $cid = $row[0];
-            //TODO; Do this first, and if there is already a cid, user already exists
-
-            // hash the Password. Username is the email.
-            $hash = password_hash($password, PASSWORD_DEFAULT);
-            $sql = "insert into user set username = '$email', hash = '$hash', cid = '$cid'";
-            $result = $dbconn->query($sql);
-            
-
-            $sql = "insert into user_role (rid, cid) values ($rid,$cid)";
-            $result = $dbconn->query($sql);
-
-             if (!$result){
-                 echo '{"response":"false"}';
-             }
-
-             else{
-                 echo '{"response":"true"}';
-             }
+            else{
+                echo '{"response":"true"}';
+            }
 
         }
         if($_method=="PUT"){
@@ -257,14 +269,14 @@ private function member($_method,$param = '',$col = ''){
             $hash = password_hash($password, PASSWORD_DEFAULT);
        
             $sql = "update user set hash = '$hash' and username = '$email' where cid = $cid";
-            $result = $dbconn->query($sql);
+            $result = $this->dbconn->query($sql);
    
             }
     
 
             $sql = "update contact set firstName = '$firstName', lastName = '$lastName', phone = '$phone', email = '$email', paypalEmail = '$paypalEmail',
             emergencyName = '$emergencyName',emergencyPhone='$emergencyPhone',emergencyEmail= '$emergencyEmail' where cid = $cid";
-            $result = $dbconn->query($sql);
+            $result = $this->dbconn->query($sql);
             if (!$result){
                  echo '{"response":"false"}';
              }
@@ -272,22 +284,19 @@ private function member($_method,$param = '',$col = ''){
             else{
                  echo '{"response":"true"}';
              }
-        }
-
-        //TODO: Password Reset.
-
-    
+       }
+    //TODO: Password Reset.
 }
 
 private function forgot($email){
-        $dbconn = new mysqli(self::DB_SERVER,self::DB_USER,self::DB_PASSWORD,self::DB);
+        //$dbconn = new mysqli(self::DB_SERVER,self::DB_USER,self::DB_PASSWORD,self::DB);
 
 
 }
 
 private function login(){
 
-    $dbconn = new mysqli(self::DB_SERVER,self::DB_USER,self::DB_PASSWORD,self::DB);
+    //$dbconn = new mysqli(self::DB_SERVER,self::DB_USER,self::DB_PASSWORD,self::DB);
     
     if($this->get_request_method() == "POST"){
         //$myDatabase= $this->db;// variable to access your database
@@ -298,7 +307,7 @@ private function login(){
     //omg escape this stuff pls
      $sql = "SELECT hash from user where username = '$username'";
      
-        $result = $dbconn->query($sql);
+        $result = $this->dbconn->query($sql);
         $dt = array();
         while($row = $result->fetch_assoc()){
             array_push($dt, $row);
@@ -352,7 +361,7 @@ private function APIDBTest(){
     // Initiiate Library
 
     $api = new API;
-
+    
     $api->processApi();
              
 ?>
