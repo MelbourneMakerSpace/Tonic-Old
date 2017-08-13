@@ -46,7 +46,8 @@ private function dbConnect(){
     /*
      * Public method for access api.
      * This method dynmically call the method based on the query string
-     *
+     * 
+     * http://192.168.1.7/methodname/keyValue/column?
      */
 public function processApi(){
 
@@ -73,8 +74,8 @@ public function processApi(){
 
         else if(count($funcArray) == 3)
         {
-            $col = $funcArray[1];
-            $param = $funcArray[2];
+            $col = $funcArray[2];
+            $param = $funcArray[1];
         }
          
         //echo "method exists:" . (int)method_exists($this,$func);
@@ -113,13 +114,16 @@ private function rewrite(){
 private function member($_method,$param = '',$col = ''){
     $dbconn = new mysqli(self::DB_SERVER,self::DB_USER,self::DB_PASSWORD,self::DB);
 
+    // echo "param:" . $param . " col:" . $col;
+    // exit;
+
     if($this->get_request_method() == "GET"){
             //$myDatabase= $this->db;// variable to access your database
         if(!$param && !$col){
-            $sql = "SELECT * from contact";
+            $stmt = "SELECT * from contact";
             
         if(isset($_POST['getInactive'])){
-                $sql = "SELECT contact.cid, contact.firstName, contact.lastName, plan.name, contact.email, contact.phone, plan.active
+                $stmt = "SELECT contact.cid, contact.firstName, contact.lastName, plan.name, contact.email, contact.phone, plan.active
                 FROM contact
                 LEFT JOIN membership
                 ON contact.cid=membership.cid
@@ -128,23 +132,41 @@ private function member($_method,$param = '',$col = ''){
                 WHERE plan.active=1";
                 }
         else{
-                $sql = "SELECT contact.cid, contact.firstName, contact.lastName, plan.name, contact.email, contact.phone, plan.active
+                $stmt = "SELECT contact.cid, contact.firstName, contact.lastName, plan.name, contact.email, contact.phone, plan.active
                         FROM contact
                         LEFT JOIN membership
                         ON contact.cid=membership.cid
                         LEFT JOIN plan
                         ON membership.pid=plan.pid";
             }
+            $sql = $dbconn->prepare($stmt);            
     }
 
         else if($param && !$col){
-            $sql = "SELECT * from contact where cid = $param";
+            $sql = $dbconn->prepare("SELECT * from contact where cid = ?");
+            $sql->bind_param("i", $param);
+            //$sql = "SELECT * from contact where cid = $param";
         }
 
-        else if($param && $col)
-            $sql = "SELECT * from contact where $col = '$param'";
+        else if($param && $col){
+            echo "not implemented!";
+            exit;
+            
+            // $statement = "SELECT * from contact where ? = '?'";
+            // $sql = $dbconn->prepare($statement);   
 
-            $result = $dbconn->query($sql);
+            
+
+            // $sql->bind_param("s", $col);
+            // $sql->bind_param("s", $param);
+
+            // echo($sql->fullQuery);
+            // exit;
+            // $sql->execute();
+        }
+            //$result = $dbconn->query($sql);
+            $sql->execute();            
+            $result = $sql->get_result();
             $dt = array();
             while($row = $result->fetch_assoc()){
                 array_push($dt, $row);
